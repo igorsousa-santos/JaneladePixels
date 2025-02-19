@@ -36,7 +36,7 @@ void displayText(char text[]) {
     uint8_t ssd[ssd1306_buffer_length];
     memset(ssd, 0, ssd1306_buffer_length);
 
-    const int CHARS_PER_LINE = 16; // 128 pixels / 8 pixels per char
+    const int CHARS_PER_LINE = 15; // 128 pixels / 8 pixels per char - 1 for readability
     const int LINE_HEIGHT = 8; // Each character is 8 pixels tall
     
     size_t len = strlen(text);
