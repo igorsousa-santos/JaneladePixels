@@ -34,8 +34,12 @@ project(SuaveAcordar C CXX ASM)
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
+add_executable(SuaveAcordar 
+    SuaveAcordar.c
+    libs/ssd1306/ssd1306_i2c.c
+    modules/displayText.c
+)
 
-add_executable(SuaveAcordar SuaveAcordar.c )
 
 pico_set_program_name(SuaveAcordar "SuaveAcordar")
 pico_set_program_version(SuaveAcordar "0.1")
@@ -50,13 +54,17 @@ target_link_libraries(SuaveAcordar
 
 # Add the standard include files to the build
 target_include_directories(SuaveAcordar PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/libs/ssd1306
+    ${CMAKE_CURRENT_LIST_DIR}/modules
 )
 
 # Add any user requested libraries
 target_link_libraries(SuaveAcordar 
-        pico_cyw43_arch_lwip_threadsafe_background
-        )
+    pico_stdlib
+    hardware_i2c
+    pico_cyw43_arch_lwip_threadsafe_background
+)
 
 pico_add_extra_outputs(SuaveAcordar)
 
