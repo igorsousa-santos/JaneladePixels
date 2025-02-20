@@ -38,6 +38,7 @@ add_executable(SuaveAcordar
     SuaveAcordar.c
     libs/ssd1306/ssd1306_i2c.c
     modules/displayText.c
+    modules/updateTime.c
 )
 
 
@@ -63,7 +64,10 @@ target_include_directories(SuaveAcordar PRIVATE
 target_link_libraries(SuaveAcordar 
     pico_stdlib
     hardware_i2c
+    hardware_rtc 
     pico_cyw43_arch_lwip_threadsafe_background
+    pico_lwip
+    pico_lwip_sntp
 )
 
 pico_add_extra_outputs(SuaveAcordar)

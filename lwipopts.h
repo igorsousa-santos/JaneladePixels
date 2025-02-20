@@ -86,4 +86,9 @@
 #define SLIP_DEBUG                  LWIP_DBG_OFF
 #define DHCP_DEBUG                  LWIP_DBG_OFF
 
+#define LWIP_SNTP               1
+#define SNTP_SERVER_DNS         1
+#define LWIP_DHCP              1
+#define LWIP_DNS               1
+
 #endif /* __LWIPOPTS_H__ */
