@@ -190,7 +190,7 @@ int setRTCTime() {
         t.min = utc->tm_min;
         t.sec = utc->tm_sec;
     } else {
-        printf("NTP failed\n");
+        printf("NTP failed. Using default time\n");
         t.year = 2024;
         t.month = 3;
         t.day = 15;
