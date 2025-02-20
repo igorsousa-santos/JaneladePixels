@@ -36,23 +36,33 @@ void displayText(char text[]) {
     uint8_t ssd[ssd1306_buffer_length];
     memset(ssd, 0, ssd1306_buffer_length);
 
-    const int CHARS_PER_LINE = 15; // 128 pixels / 8 pixels per char - 1 for readability
-    const int LINE_HEIGHT = 8; // Each character is 8 pixels tall
+    const int CHARS_PER_LINE = 15;
+    const int LINE_HEIGHT = 8;
     
     size_t len = strlen(text);
     int line = 0;
+    size_t current_pos = 0;
     
-    for (size_t i = 0; i < len; i += CHARS_PER_LINE) {
+    while (current_pos < len && line < 8) {
         char line_buffer[CHARS_PER_LINE + 1];
-        size_t chars_to_copy = len - i > CHARS_PER_LINE ? CHARS_PER_LINE : len - i;
+        size_t chars_in_line = 0;
         
-        strncpy(line_buffer, &text[i], chars_to_copy);
-        line_buffer[chars_to_copy] = '\0';
+        // Process characters until newline or CHARS_PER_LINE is reached
+        while (current_pos < len && chars_in_line < CHARS_PER_LINE) {
+            if (text[current_pos] == '\n') {
+                current_pos++;
+                break;
+            }
+            line_buffer[chars_in_line++] = text[current_pos++];
+        }
         
+        line_buffer[chars_in_line] = '\0';
+        
+        // Draw the line
         ssd1306_draw_string(ssd, 5, line * LINE_HEIGHT, line_buffer);
         line++;
         
-        // Prevent writing beyond display height (64 pixels = 8 lines)
+        // Break if we've reached display height limit
         if (line >= 8) break;
     }
     
