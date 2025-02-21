@@ -70,5 +70,14 @@ target_link_libraries(SuaveAcordar
     pico_lwip_sntp
 )
 
+
+add_definitions(
+    # SNTP Configurations
+    -DSNTP_SERVER_DNS=1
+    -DSNTP_SERVER_ADDRESS="pool.ntp.org"
+    -DSNTP_SET_SYSTEM_TIME=setSystemTimeCallback
+    -DSNTP_STARTUP_DELAY=0
+)
+
 pico_add_extra_outputs(SuaveAcordar)
 

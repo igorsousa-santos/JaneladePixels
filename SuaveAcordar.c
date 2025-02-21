@@ -55,7 +55,7 @@ int main() {
         displayText("Usando horario padrao");
     }
     printf("Updating time!\n");
-    displayText("Atualizando horario");
+    displayText("Atualizando\n horario");
     setRTCTime();
 
     datetime_t t;
@@ -73,5 +73,6 @@ int main() {
         displayText(datetime_str);
 
         sleep_ms(1000);
+        tight_loop_contents();
     }
 }
