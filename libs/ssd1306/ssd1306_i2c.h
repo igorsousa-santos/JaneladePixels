@@ -1,3 +1,9 @@
+/*
+* Adapted from
+* https://github.com/BitDogLab/BitDogLab-C/tree/main/display_oled
+*
+*/
+
 #include <stdlib.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
