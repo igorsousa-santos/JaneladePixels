@@ -25,8 +25,9 @@ int connectToWifi() {
         char buffer[128];
         snprintf(buffer, sizeof(buffer), "SSID:\n %s", WIFI_SSID);
         displayText(buffer);
-        if (cyw43_arch_wifi_connect_timeout_ms(
-                WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000) == 0) {
+        if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD,
+                                               CYW43_AUTH_WPA2_AES_PSK,
+                                               30000) == 0) {
             // Read the ip address in a human readable way
             uint8_t* ip_address =
                 (uint8_t*)&(cyw43_state.netif[0].ip_addr.addr);
@@ -43,14 +44,47 @@ int connectToWifi() {
     return 0;
 }
 
+typedef struct {
+    uint8_t start_hour;
+    uint8_t end_hour;
+    uint8_t r, g, b;
+} TimeColorMapping;
+
+void setLedColorBasedOnTime(uint8_t hour, breathing_animation_state_t *anim) {
+    static const TimeColorMapping color_map[] = {
+        // Start hour, end hour, R, G, B
+        {22, 6, 0, 0, 0},         // Late night
+        {6, 7, 255, 255, 255},    // Early morning  #ffffff
+        {7, 9, 135, 215, 250},    // Morning        #87d7fa
+        {9, 11, 235, 255, 161},   // Late Morning   #ebffa1
+        {11, 13, 255, 240, 77},   // Noon           #fff04d
+        {13, 15, 41, 141, 255},  // Early afternoon #298dff
+        {15, 17, 255, 159, 41},  // Late afternoon    #ff9f29
+        {17, 18, 66, 52, 250},    // Early evening    #4234fa
+        {18, 20, 51, 20, 250},     // Late evening      #3314fa
+        {20, 22, 14, 5, 128},     // Night             #0e0580
+    };
+
+    const int mappings = sizeof(color_map) / sizeof(color_map[0]);
+
+    for (int i = 0; i < mappings; i++) {
+        if (hour >= color_map[i].start_hour && hour < color_map[i].end_hour) {
+            breathingAnimationSetTarget(anim, color_map[i].r, color_map[i].g,
+                                        color_map[i].b);
+            return;
+        }
+    }
+
+    // Default values if no range matches
+    breathingAnimationSetTarget(anim, 0, 0, 0);
+}
+
 int main() {
     stdio_init_all();
     initDisplay();
     clearDisplay();
 
     sleep_ms(2000);
-
-    setPattern();
 
     displayText("Conectando");
 
@@ -63,8 +97,16 @@ int main() {
     displayText("Atualizando\n horario");
     setRTCTime();
 
+    // Disable WiFi after updating the time
+    cyw43_arch_deinit();
+
     datetime_t t;
     char datetime_str[20];
+    breathing_animation_state_t anim = initBreathingAnimation();
+    breathingAnimationSetTarget(&anim, 255, 1, 128);
+
+    uint8_t test_hour = 0;
+    absolute_time_t next_hour_change = make_timeout_time_ms(1000);
 
     while (true) {
         // Get current time from RTC
@@ -77,7 +119,12 @@ int main() {
         // Display the time
         displayText(datetime_str);
 
-        sleep_ms(1000);
-        tight_loop_contents();
+        setLedColorBasedOnTime(t.hour, &anim);
+
+        // Polling animation loop
+        playBreathingAnimation(&anim);
+
+        // Short sleep to reduce CPU usage
+        sleep_ms(1);
     }
 }
