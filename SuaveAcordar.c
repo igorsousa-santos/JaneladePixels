@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include "credentials.h"
 #include "hardware/rtc.h"
+
 #include "modules/displayText.h"
 #include "modules/updateTime.h"
+#include "modules/ws2812b.h"
+
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
@@ -46,6 +49,8 @@ int main() {
     clearDisplay();
 
     sleep_ms(2000);
+
+    setPattern();
 
     displayText("Conectando");
 

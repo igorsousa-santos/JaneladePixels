@@ -38,5 +38,8 @@
     "raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja",
     "files.exclude": {
         "**/build": true
+    },
+    "files.associations": {
+        "ws2812b.pio.h": "c"
     }
 }
