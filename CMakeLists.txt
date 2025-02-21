@@ -39,11 +39,14 @@ add_executable(SuaveAcordar
     libs/ssd1306/ssd1306_i2c.c
     modules/displayText.c
     modules/updateTime.c
+    modules/ws2812b.c
 )
-
 
 pico_set_program_name(SuaveAcordar "SuaveAcordar")
 pico_set_program_version(SuaveAcordar "0.1")
+
+# Generate PIO header
+pico_generate_pio_header(SuaveAcordar ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812b.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(SuaveAcordar 0)
@@ -65,6 +68,8 @@ target_link_libraries(SuaveAcordar
     pico_stdlib
     hardware_i2c
     hardware_rtc 
+    hardware_pio
+    hardware_clocks
     pico_cyw43_arch_lwip_threadsafe_background
     pico_lwip
     pico_lwip_sntp
