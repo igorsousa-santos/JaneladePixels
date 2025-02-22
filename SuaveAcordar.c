@@ -88,6 +88,8 @@ void setLedColorBasedOnTime(uint8_t hour, breathing_animation_state_t *anim) {
 }
 
 void setDisplayBasedOnTime(uint8_t hour) {
+    // We have fewer time of day changes then color changes
+    // so a simple if else loop works
     if (hour >= 6 && hour < 18) {
         displayBitmap(sun_bits);
     } else if (hour >= 18 && hour < 22) {
