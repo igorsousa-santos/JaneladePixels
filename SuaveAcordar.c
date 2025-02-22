@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "credentials.h"
 #include "hardware/rtc.h"
 
@@ -12,6 +13,9 @@
 #include "images/moon.h"
 #include "images/stars.h"
 #include "images/sun.h"
+
+#define BITDOGLAB_BUTTON_A 5
+#define BITDOGLAB_BUTTON_B 6
 
 int connectToWifi() {
     // Initialise Wi-Fi
@@ -93,11 +97,51 @@ void setDisplayBasedOnTime(uint8_t hour) {
     }
 }
 
+bool isButtonPressed(uint gpio) {
+    // One entry for each button
+    static bool buttonPrevState[2] = { false, false };
+    static uint64_t lastPressTime[2] = { 0, 0 };
+    const uint64_t debounceDelayMs = 50;
+
+    // Map gpio number to index (0 for Button A, 1 for Button B) kinda hacky but it works ¯\_(ツ)_/¯
+    int index = gpio - BITDOGLAB_BUTTON_A;  
+    
+    uint64_t now = to_ms_since_boot(get_absolute_time());
+    bool currentlyPressed = (gpio_get(gpio) == 0);
+
+    // Only register a press if the button state changes from not pressed to pressed and debounce elapsed
+    if (currentlyPressed && !buttonPrevState[index] && (now - lastPressTime[index] > debounceDelayMs)) {
+        buttonPrevState[index] = true;
+        lastPressTime[index] = now;
+        return true;
+    }
+    if (!currentlyPressed) {
+        buttonPrevState[index] = false;
+    }
+    return false;
+}
+
+void initButtons() {
+    gpio_init(BITDOGLAB_BUTTON_A);
+    gpio_set_dir(BITDOGLAB_BUTTON_A, GPIO_IN);
+    gpio_pull_up(BITDOGLAB_BUTTON_A);
+
+    gpio_init(BITDOGLAB_BUTTON_B);
+    gpio_set_dir(BITDOGLAB_BUTTON_B, GPIO_IN);
+    gpio_pull_up(BITDOGLAB_BUTTON_B);
+
+}
+
 int main() {
+    
     stdio_init_all();
     initDisplay();
     clearDisplay();
+    
+    initButtons();
+    uint8_t isAnimationPlaying = 1;
 
+    // Short delay to wait for serial connection
     sleep_ms(2000);
 
     displayText("Conectando");
@@ -126,15 +170,19 @@ int main() {
         // Get current time from RTC
         rtc_get_datetime(&t);
 
-        // Format time as string
-        snprintf(datetime_str, sizeof(datetime_str),
-                 "%02d/%02d/%d\n%02d:%02d:%02d", t.day, t.month, t.year, t.hour,
-                 t.min, t.sec);
+        if(isAnimationPlaying) {
+            setLedColorBasedOnTime(t.hour, &anim);
+            setDisplayBasedOnTime(t.hour);
+        } else {
+            clearDisplay();
+            breathingAnimationSetTarget(&anim, 0,0,0);
+        }
 
-        setLedColorBasedOnTime(t.hour, &anim);
-        setDisplayBasedOnTime(t.hour);
+        if(isButtonPressed(BITDOGLAB_BUTTON_A) || isButtonPressed(BITDOGLAB_BUTTON_B)) {
+            isAnimationPlaying = !isAnimationPlaying;
+        }
 
-        // Polling animation loop
+        // Poll animation loop
         playBreathingAnimation(&anim);
 
         // Short sleep to reduce CPU usage
