@@ -69,6 +69,6 @@ void displayText(char text[]) {
     render_on_display(ssd, &frame_area);
 }
 
-void displayBitmap(const uint8_t *bitmap) {
+void displayBitmap(uint8_t *bitmap) {
     render_on_display(bitmap, &frame_area);
 }
