@@ -9,6 +9,10 @@
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
+#include "images/moon.h"
+#include "images/stars.h"
+#include "images/sun.h"
+
 int connectToWifi() {
     // Initialise Wi-Fi
     if (cyw43_arch_init()) {
@@ -23,7 +27,7 @@ int connectToWifi() {
     int retry_count = 0;
     while (retry_count < MAX_RETRIES) {
         char buffer[128];
-        snprintf(buffer, sizeof(buffer), "SSID:\n %s", WIFI_SSID);
+        snprintf(buffer, sizeof(buffer), "Conectando!\n SSID:\n %s", WIFI_SSID);
         displayText(buffer);
         if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD,
                                                CYW43_AUTH_WPA2_AES_PSK,
@@ -79,6 +83,16 @@ void setLedColorBasedOnTime(uint8_t hour, breathing_animation_state_t *anim) {
     breathingAnimationSetTarget(anim, 0, 0, 0);
 }
 
+void setDisplayBasedOnTime(uint8_t hour) {
+    if (hour >= 6 && hour < 18) {
+        displayBitmap(sun_bits);
+    } else if (hour >= 18 && hour < 22) {
+        displayBitmap(moon_bits);
+    } else {
+        displayBitmap(stars_bits);
+    }
+}
+
 int main() {
     stdio_init_all();
     initDisplay();
@@ -116,10 +130,9 @@ int main() {
         snprintf(datetime_str, sizeof(datetime_str),
                  "%02d/%02d/%d\n%02d:%02d:%02d", t.day, t.month, t.year, t.hour,
                  t.min, t.sec);
-        // Display the time
-        displayText(datetime_str);
 
         setLedColorBasedOnTime(t.hour, &anim);
+        setDisplayBasedOnTime(t.hour);
 
         // Polling animation loop
         playBreathingAnimation(&anim);

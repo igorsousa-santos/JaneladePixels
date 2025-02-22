@@ -8,4 +8,5 @@
 void initDisplay(void);
 void clearDisplay(void);
 void displayText(char text[]);
+void displayBitmap(const uint8_t bitmap[]);
 #endif

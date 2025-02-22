@@ -61,6 +61,7 @@ target_include_directories(SuaveAcordar PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/libs/ssd1306
     ${CMAKE_CURRENT_LIST_DIR}/modules
+    ${CMAKE_CURRENT_LIST_DIR}/images
 )
 
 # Add any user requested libraries

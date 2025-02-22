@@ -40,6 +40,7 @@
         "**/build": true
     },
     "files.associations": {
-        "ws2812b.pio.h": "c"
+        "ws2812b.pio.h": "c",
+        "math.h": "c"
     }
 }
