@@ -57,16 +57,16 @@ typedef struct {
 void setLedColorBasedOnTime(uint8_t hour, breathing_animation_state_t *anim) {
     static const TimeColorMapping color_map[] = {
         // Start hour, end hour, R, G, B
-        {22, 6, 0, 0, 0},         // Late night
-        {6, 7, 255, 255, 255},    // Early morning  #ffffff
-        {7, 9, 135, 215, 250},    // Morning        #87d7fa
-        {9, 11, 235, 255, 161},   // Late Morning   #ebffa1
-        {11, 13, 255, 240, 77},   // Noon           #fff04d
-        {13, 15, 41, 141, 255},  // Early afternoon #298dff
-        {15, 17, 255, 159, 41},  // Late afternoon    #ff9f29
-        {17, 18, 66, 52, 250},    // Early evening    #4234fa
-        {18, 20, 51, 20, 250},     // Late evening      #3314fa
-        {20, 22, 14, 5, 128},     // Night             #0e0580
+        {22,  6,   0,   0, 0},      // Late night       #000000
+        { 6,  7, 255, 255, 255},    // Early morning    #ffffff
+        { 7,  9, 135, 215, 250},    // Morning          #87d7fa
+        { 9, 11, 235, 255, 161},    // Late Morning     #ebffa1
+        {11, 13, 255, 240,  77},    // Noon             #fff04d
+        {13, 15,  41, 141, 255},    // Early afternoon  #298dff
+        {15, 17, 255, 159,  41},    // Late afternoon   #ff9f29
+        {17, 18,  66,  52, 250},    // Early evening    #4234fa
+        {18, 20,  51,  20, 250},    // Late evening     #3314fa
+        {20, 22,  14,   5, 128},    // Night            #0e0580
     };
 
     const int mappings = sizeof(color_map) / sizeof(color_map[0]);
