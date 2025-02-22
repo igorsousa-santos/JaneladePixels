@@ -17,11 +17,11 @@
 #define BITDOGLAB_BUTTON_A 5
 #define BITDOGLAB_BUTTON_B 6
 
-int connectToWifi() {
+bool connectToWifi() {
     // Initialise Wi-Fi
     if (cyw43_arch_init()) {
         displayText("Não foi possível inicializar o Wi-Fi");
-        return 0;
+        return false;
     }
 
     // Enable wifi station
@@ -41,7 +41,7 @@ int connectToWifi() {
                 (uint8_t*)&(cyw43_state.netif[0].ip_addr.addr);
             printf("IP address %d.%d.%d.%d\n", ip_address[0], ip_address[1],
                    ip_address[2], ip_address[3]);
-            return 1;
+            return true;
         }
         retry_count++;
         if (retry_count < MAX_RETRIES) {
@@ -49,7 +49,7 @@ int connectToWifi() {
             sleep_ms(2000);  // Wait 2 seconds before retrying
         }
     }
-    return 0;
+    return false;
 }
 
 typedef struct {
