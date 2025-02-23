@@ -3,7 +3,7 @@
 #include "credentials.h"
 #include "hardware/rtc.h"
 
-#include "modules/displayText.h"
+#include "modules/OLEDDisplay.h"
 #include "modules/updateTime.h"
 #include "modules/ws2812b.h"
 

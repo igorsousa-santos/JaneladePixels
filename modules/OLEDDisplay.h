@@ -1,5 +1,5 @@
-#ifndef displayText_H
-#define displayText_H
+#ifndef OLEDDisplay_H
+#define OLEDDisplay_H
 
 #include <string.h>
 #include "hardware/i2c.h"

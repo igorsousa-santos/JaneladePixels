@@ -1,4 +1,4 @@
-#include "displayText.h"
+#include "OLEDDisplay.h"
 #include <stdio.h>
 #include <string.h>
 #include "hardware/i2c.h"

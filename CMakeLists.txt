@@ -37,7 +37,7 @@ pico_sdk_init()
 add_executable(SuaveAcordar 
     SuaveAcordar.c
     libs/ssd1306/ssd1306_i2c.c
-    modules/displayText.c
+    modules/OLEDDisplay.c
     modules/updateTime.c
     modules/ws2812b.c
 )
