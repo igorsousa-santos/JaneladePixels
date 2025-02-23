@@ -141,7 +141,7 @@ int main() {
     clearDisplay();
     
     initButtons();
-    uint8_t isAnimationPlaying = 1;
+    bool isAnimationPlaying = true;
 
     // Short delay to wait for serial connection
     sleep_ms(2000);

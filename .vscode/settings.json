@@ -41,6 +41,7 @@
     },
     "files.associations": {
         "ws2812b.pio.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "pio.h": "c"
     }
 }

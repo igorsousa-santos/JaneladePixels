@@ -12,11 +12,8 @@ typedef struct {
     uint sm;
     uint8_t r, g, b; // Color targets
     uint8_t r_current, g_current, b_current; // Current color
-    float animation_progress;
     absolute_time_t next_update;
-    uint8_t max_brightness, min_brightness;
     uint8_t update_interval_ms;
-    uint32_t animation_duration_ms;
 } breathing_animation_state_t;
 
 breathing_animation_state_t initBreathingAnimation();
