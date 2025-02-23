@@ -28,36 +28,36 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(SuaveAcordar C CXX ASM)
+project(JanelaDePixels C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
-add_executable(SuaveAcordar 
-    SuaveAcordar.c
+add_executable(JanelaDePixels 
+    JanelaDePixels.c
     libs/ssd1306/ssd1306_i2c.c
     modules/OLEDDisplay.c
     modules/updateTime.c
     modules/ws2812b.c
 )
 
-pico_set_program_name(SuaveAcordar "SuaveAcordar")
-pico_set_program_version(SuaveAcordar "0.1")
+pico_set_program_name(JanelaDePixels "JanelaDePixels")
+pico_set_program_version(JanelaDePixels "0.1")
 
 # Generate PIO header
-pico_generate_pio_header(SuaveAcordar ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812b.pio)
+pico_generate_pio_header(JanelaDePixels ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812b.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(SuaveAcordar 0)
-pico_enable_stdio_usb(SuaveAcordar 1)
+pico_enable_stdio_uart(JanelaDePixels 0)
+pico_enable_stdio_usb(JanelaDePixels 1)
 
 # Add the standard library to the build
-target_link_libraries(SuaveAcordar
+target_link_libraries(JanelaDePixels
         pico_stdlib)
 
 # Add the standard include files to the build
-target_include_directories(SuaveAcordar PRIVATE
+target_include_directories(JanelaDePixels PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/libs/ssd1306
     ${CMAKE_CURRENT_LIST_DIR}/modules
@@ -65,7 +65,7 @@ target_include_directories(SuaveAcordar PRIVATE
 )
 
 # Add any user requested libraries
-target_link_libraries(SuaveAcordar 
+target_link_libraries(JanelaDePixels 
     pico_stdlib
     hardware_i2c
     hardware_rtc 
@@ -85,5 +85,5 @@ add_definitions(
     -DSNTP_STARTUP_DELAY=0
 )
 
-pico_add_extra_outputs(SuaveAcordar)
+pico_add_extra_outputs(JanelaDePixels)
 
