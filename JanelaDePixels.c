@@ -159,14 +159,11 @@ int main() {
 
     // Disable WiFi after updating the time
     cyw43_arch_deinit();
-
+    
     datetime_t t;
-    char datetime_str[20];
-    breathing_animation_state_t anim = initBreathingAnimation();
-    breathingAnimationSetTarget(&anim, 255, 1, 128);
+    rtc_get_datetime(&t);
 
-    uint8_t test_hour = 0;
-    absolute_time_t next_hour_change = make_timeout_time_ms(1000);
+    breathing_animation_state_t anim = initBreathingAnimation();
 
     while (true) {
         // Get current time from RTC
